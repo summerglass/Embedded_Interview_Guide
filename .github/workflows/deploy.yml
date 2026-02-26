@@ -19,8 +19,14 @@ jobs:
           chmod +x mdbook
           sudo mv mdbook /usr/local/bin/mdbook
 
-      - name: Build and Deploy
+      - name: Build with mdBook
+        run: mdbook build
+
+      - name: List files (Debug step)
+        run: ls -R  # 这一步是为了在日志里看一眼到底有没有生成 book 文件夹
+
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./book
+          publish_dir: ./book  # 确保这里和 mdbook 生成的目录一致
