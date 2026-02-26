@@ -2,22 +2,25 @@ name: deploy
 on:
   push:
     branches:
-      - main  # 如果你的主分支叫 master，请修改此处
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Install mdBook
-          run:|
-            curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.40/mdbook-v0.4.40-x86_64-unknown-linux-gnu.tar.gz | tar -xz
-            chmod +x mdbook
-            sudo mv mdbook /usr/local/bin/mdbook
+        run: |
+          curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.40/mdbook-v0.4.40-x86_64-unknown-linux-gnu.tar.gz | tar -xz
+          chmod +x mdbook
+          sudo mv mdbook /usr/local/bin/mdbook
 
       - name: Build and Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./book  # mdBook 默认生成目录
+          publish_dir: ./book
